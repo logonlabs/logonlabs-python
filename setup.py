@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="logonlabs-python",
-    version="1.0.0",
+    version="1.0.1",
     author="Edward Guan",
     author_email="eguan@logonlabs.com",
     description="Logonlabs Python package",
