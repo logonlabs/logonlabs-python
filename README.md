@@ -6,15 +6,15 @@ The official LogonLabs Python library.
     pip install -i logonlabs-python
 ## LogonLabs API
 
-- Prior to coding, some configuration is required at https://logonlabs.com/app/#app-settings
+- Prior to coding, some configuration is required at https://app.logonlabs.com/app/#app-settings
 
-- For the full Developer Documentation please visit: https://logonlabs.com/docs/api/
+- For the full Developer Documentation please visit: https://app.logonlabs.com/docs/api/
 
 ---
 ### Instantiating a new client
 
-- Your `APP_ID` can be found in [App Settings](https://logonlabs.com/app/#/app-settings).
-- `APP_SECRETS` are configured [here](https://logonlabs.com/app/#/app-secrets).
+- Your `APP_ID` can be found in [App Settings](https://app.logonlabs.com/app/#/app-settings).
+- `APP_SECRETS` are configured [here](https://app.logonlabs.com/app/#/app-secrets).
 - The `LOGONLABS_API_ENDPOINT` should be set to `https://api.logonlabs.com`.
 
 Create a new instance of `LogonClient`.  
@@ -44,7 +44,7 @@ The following workflow is required if you're using Python to process all transac
 This call begins the LogonLabs managed SSO process.  The `client_data` property is optional and is used to pass any data that is required after validating the request.  The `client_encryption_key` property is optionally passed if the application requires encrypting any data that is passed between the front and back ends of its infrastructure. The `tags` property is an Array of type Tag which is a simple object representing a key/value pair.
 ```python
 
-identity_provider = '{string}' # one of the following ['microsoft','google','facebook','linkedin','slack','twitter','github','quickbooks','onelogin']
+identity_provider = '{string}' # one of the following ['microsoft','google','facebook','linkedin','slack','github','quickbooks','onelogin']
 identity_provider_id = '{string}' # require identity_provider or identity_provider_id
 client_data = '{string}'
 client_encryption_key = "qbTRzCvUju"
@@ -54,7 +54,7 @@ response = logonClient.startLogin(identity_provider, identity_provider_id, "emai
 redirect_url = response.url
 ```
 
-The `redirect_url` property returned should be redirected to by the application.  Upon submitting their credentials, users will be redirected to the `callback_url` set within the application settings at https://logonlabs.com/app/#/app-settings.
+The `redirect_url` property returned should be redirected to by the application.  Upon submitting their credentials, users will be redirected to the `callback_url` set within the application settings at https://app.logonlabs.com/app/#/app-settings.
 &nbsp;
 #### Step 2 - ValidateLogin
 This method is used to validate the results of the login attempt.  `query_token` corresponds to the query parameter with the name `token` appended to the callback url specified for your app.
