@@ -15,8 +15,6 @@ from logonlabs.allowableValues import identityProviders,\
     eventTypes,\
     localVallidationValues
 
-from logonlabs.util import encrypt, decrypt
-
 class Logonlabs(object):
     def __init__(self, app_id, app_secret, api_path=DEFAULT_BASE_URL):
         self.app_id = app_id
@@ -40,7 +38,8 @@ class Logonlabs(object):
         identity_provider_id=None,
         email_address=None,
         client_data=None,
-        client_encryption_key=None,
+        callback_url=None,
+        destination_url=None,
         tags=None):
         params = {
             'app_id': self.app_id
@@ -61,8 +60,11 @@ class Logonlabs(object):
         if client_data is not None:
             params['client_data'] = client_data
 
-        if client_encryption_key is not None:
-            params['client_encryption_key'] = client_encryption_key
+        if callback_url is not None:
+            params['callback_url'] = callback_url
+
+        if destination_url is not None:
+            params['destination_url'] = destination_url
 
         if tags is not None:
             params['tags'] = tags
@@ -168,11 +170,3 @@ class Logonlabs(object):
             params['tags'] = tags
 
         return updateEvent(self.api_path, params, headers)
-
-    @staticmethod
-    def encrypt(msg, password):
-        return encrypt(msg, password)
-
-    @staticmethod
-    def decrypt(enc, password):
-        return decrypt(enc, password)

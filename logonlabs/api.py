@@ -27,10 +27,10 @@ def redirectLogin(url, params):
 
 
 def createEvent(url, params, headers):
-    r = requests.post(url+'/event', params=params, headers=headers)
+    r = requests.post(url+'/events', params=params, headers=headers)
     return r
 
 
 def updateEvent(url, params, headers):
-    r = requests.put(url+'/event/'+params['event_id'], params=params, headers=headers)
+    r = requests.put(url+'/events/'+params['event_id'], params=params, headers=headers)
     return r

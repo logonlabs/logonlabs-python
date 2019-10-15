@@ -3,7 +3,7 @@
 The official LogonLabs Python library.
 ## Download
 
-    pip install -i logonlabs-python
+    pip install logonlabs-python
 ## LogonLabs API
 
 - Prior to coding, some configuration is required at https://app.logonlabs.com/app/#app-settings
@@ -41,20 +41,21 @@ if data['event_success']:
 ### Python Only Workflow
 The following workflow is required if you're using Python to process all transaction requests.  If this does not apply to you, please refer to the SSO Login QuickStart section.
 #### Step 1 - StartLogin
-This call begins the LogonLabs managed SSO process.  The `client_data` property is optional and is used to pass any data that is required after validating the request.  The `client_encryption_key` property is optionally passed if the application requires encrypting any data that is passed between the front and back ends of its infrastructure. The `tags` property is an Array of type Tag which is a simple object representing a key/value pair.
+This call begins the LogonLabs managed SSO process.  The `client_data` property is optional and is used to pass any data that is required after validating the request. The `tags` property is an Array of type Tag which is a simple object representing a key/value pair.
 ```python
 
-identity_provider = '{string}' # one of the following ['microsoft','google','facebook','linkedin','slack','github','quickbooks','onelogin']
+identity_provider = '{string}' # one of the following ['microsoft','google','facebook','linkedin','slack','twitter','github','quickbooks','onelogin','okta','apple','basecamp','dropbox','fitbit','planningcenter','twitch']
 identity_provider_id = '{string}' # require identity_provider or identity_provider_id
 client_data = '{string}'
-client_encryption_key = "qbTRzCvUju"
 tags = [{'example-key': 'example-value'}]
 redirect = False
-response = logonClient.startLogin(identity_provider, identity_provider_id, "emailAddress", client_data, client_encryption_key, tags)
+callback_url = 'https://example.com'
+destination_url = 'https://example.com'
+response = logonClient.startLogin(identity_provider, identity_provider_id, "emailAddress", client_data, callback_url, destination_url, tags)
 redirect_url = response.url
 ```
 
-The `redirect_url` property returned should be redirected to by the application.  Upon submitting their credentials, users will be redirected to the `callback_url` set within the application settings at https://app.logonlabs.com/app/#/app-settings.
+The `redirect_url` property returned should be redirected to by the application.  Upon submitting their credentials, users will be redirected to the `callback_url` set within the application settings at https://logonlabs.com/app/#/app-settings.
 &nbsp;
 #### Step 2 - ValidateLogin
 This method is used to validate the results of the login attempt.  `query_token` corresponds to the query parameter with the name `token` appended to the callback url specified for your app.
@@ -104,15 +105,3 @@ data = response.json()
 identity_providers = data['identity_providers']
 for provider in identity_providers:
     #each individual providers available for this email address
-
-```
-#### Encrypt / Decrypt
-The Python SDK has built in methods for encrypting strings using AES encryption.  Use a value for your encryption key that only your client will know how to decrypt 
-```python
-
-client_encryption_key = "qbTRzCvUju"
-value = "string to be encrypted"
-encrypted_string = logonClient.encrypt(value, client_encryption_key)
-
-decrypted_string = logonClient.decrypt(encrypted_string, client_encryption_key)
-```
