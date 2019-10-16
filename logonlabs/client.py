@@ -71,7 +71,7 @@ class Logonlabs(object):
 
         response = startLogin(self.api_path, params)
         responseObject = response.json()
-        if responseObject is None or responseObject['token'] is None:
+        if responseObject is None or not 'token' in responseObject:
             return response
         params = {
             'token': responseObject['token']

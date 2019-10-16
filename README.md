@@ -2,8 +2,14 @@
 
 The official LogonLabs Python library.
 ## Download
-
+- First time install
+```
     pip install logonlabs-python
+```
+- If you have installed the package already, please upgrade it.
+```
+    pip install --upgrade logonlabs-python
+```
 ## LogonLabs API
 
 - Prior to coding, some configuration is required at https://app.logonlabs.com/app/#app-settings
