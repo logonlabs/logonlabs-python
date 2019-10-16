@@ -35,7 +35,7 @@ token = request_headers["token"]
 response = logonClient.validateLogin(token)
 data = response.json()
 if data['event_success']:
-    #success
+    #authentication and validation succeeded. proceed with post-auth workflows (ie, create a user session token for your system).
 ```
 ---
 ### Python Only Workflow
@@ -51,7 +51,7 @@ tags = [{'example-key': 'example-value'}]
 redirect = False
 callback_url = 'https://example.com'
 destination_url = 'https://example.com'
-response = logonClient.startLogin(identity_provider, identity_provider_id, "emailAddress", client_data, callback_url, destination_url, tags)
+response = logonClient.startLogin(identity_provider, identity_provider_id, "example@emailaddress.com", client_data, callback_url, destination_url, tags)
 redirect_url = response.url
 ```
 
@@ -68,31 +68,22 @@ if data['event_success']:
     #success
 else:
     validation_details = data['validation_details']
-    if validation_details['auth_validation'] == 'Fail':
-        #authentication with identity provider failed
-
-    if validation_details['email_match_validation'] == 'Fail':
-        #email didn't match the one provided to StartLogin
+    if validation_details['domain_validation'] == 'Fail':
+        #provider used was not enabled for the domain of the user that was authenticated
 
     if validation_details['ip_validation'] == 'Fail' or validation_details['geo_validation'] == 'Fail' or validation_details['time_validation'] == 'Fail':
         #validation failed via restriction settings for the app
 ```
 ---
-### Events
-The CreateEvent method can be used to create events that are outside of our SSO workflows.  UpdateEvent can be used to update any events made either by CreateEvent or by our SSO login.
+### CreateEvent
+The CreateEvent method allows one to create events that are outside of our SSO workflows.
 ```python
 
 local_validation = '{string}' # one of the following ['Pass', 'Fail', 'NotApplicable']
 tags = [{'example-key': 'example-value'}]
 event_type = '{string}' # one of the following ['LocalLogin', 'LocalLogout']
 
-response = logonClient.createEvent(event_type, True, local_validation, "email_address", "ip_address", "user_agent", "first_name", "last_name", tags)
-data = response.json()
-event_id = data['event_id']
-
-local_validation = 'Fail'
-tags = [{'failure-field': 'detailed reason for failure'}]
-response = logonClient.updateEvent(event_id, local_validation, tags)
+response = logonClient.createEvent(event_type, True, local_validation, "{EMAIL_ADDRESS}", "{IP_ADDRESS}", "{USER_AGENT}", "{FIRST_NAME}", "{LAST_NAME}", tags)
 ```
 ---
 ### Helper Methods
@@ -100,8 +91,13 @@ response = logonClient.updateEvent(event_id, local_validation, tags)
 This method is used to retrieve a list of all providers enabled for the application.
 If an email address is passed to the method, it will return the list of providers available for that email domain.
 ```python
-response = logonClient.getProviders("emailAddress")
+response = logonClient.getProviders("example@emailaddress.com")
 data = response.json()
-identity_providers = data['identity_providers']
-for provider in identity_providers:
+social_identity_providers = data['social_identity_providers']
+for provider in social_identity_providers:
     #each individual providers available for this email address
+
+enterprise_identity_providers = data['enterprise_identity_providers']
+for enterpriseProvider in enterprise_identity_providers:
+    #each enterprise providers available for this email address
+```
